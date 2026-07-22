@@ -17,7 +17,7 @@ interface AsignaturaData {
   // 2.1 Resultados
   resultados_tabla: string; resultados_actividades: string; res_instrumento: string; 
   resultados_logro: string; res_criterios: string;
-  res_acciones: string; res_propuestas: string; 
+  res_acciones: string; res_propuestas: string; res_cumplimiento: string;
   // 2.2 Habilidades Blandas
   habilidades_tabla: string[]; hab_criterios: string; hab_instrumento: string;
   habilidades_actividades: string; habilidades_logro: string;
@@ -123,7 +123,7 @@ export const InformeForm = ({ rolUsuario, userId, informeId, onVolver }: Props) 
     }
   };
 
-  const onSubmit = async (data: FieldValues) => {
+const onSubmit = async (data: FieldValues) => {
     try {
       const actividades_docencia = data.asignaturas.map((a: AsignaturaData) => ({
         carrera: a.carrera, materia: a.materia, codigo: a.codigo, paralelo: a.paralelo,
@@ -140,6 +140,7 @@ export const InformeForm = ({ rolUsuario, userId, informeId, onVolver }: Props) 
         res_criterios: a.res_criterios,
         res_acciones: a.res_acciones, 
         res_propuestas: a.res_propuestas, 
+        res_cumplimiento: a.res_cumplimiento, 
         habilidades_tabla: a.habilidades_tabla, 
         hab_criterios: a.hab_criterios,
         hab_instrumento: a.hab_instrumento,
@@ -157,8 +158,8 @@ export const InformeForm = ({ rolUsuario, userId, informeId, onVolver }: Props) 
         tac_cumplimiento: a.tac_cumplimiento
       }));
 
+      // NOTA: Quitamos el "docente_id: userId" de aquí para no sobrescribirlo
       const informePreparado = {
-        docente_id: userId,
         docente_nombre: data.docente_nombre,
         periodo: data.periodo,
         actividades_docencia: actividades_docencia,
@@ -182,12 +183,15 @@ export const InformeForm = ({ rolUsuario, userId, informeId, onVolver }: Props) 
       };
 
       if (informeId) {
+        // ACTUALIZACIÓN: Solo enviamos los datos, respetando al dueño original del informe
         const { error } = await supabase.from('informes').update(informePreparado).eq('id', informeId);
         if (error) throw error;
         alert("¡Informe actualizado correctamente!");
         if (onVolver) onVolver(); 
       } else {
-        const { error } = await supabase.from('informes').insert([informePreparado]);
+        // CREACIÓN NUEVA: Aquí sí le asignamos el ID del usuario actual (el docente)
+        const informeNuevo = { ...informePreparado, docente_id: userId };
+        const { error } = await supabase.from('informes').insert([informeNuevo]);
         if (error) throw error;
         alert("¡Informe guardado con éxito en la base de datos!");
         if (onVolver) onVolver(); 
