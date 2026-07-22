@@ -1,0 +1,71 @@
+:root {
+  /* Forzamos los colores a negro puro para los textos */
+  --text: #000000;
+  --text-h: #000000;
+  --bg: #f4f6f8;
+  --border: #cccccc;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 16px/145% var(--sans);
+  letter-spacing: 0.18px;
+  
+  /* ESTA LÍNEA ES LA MAGIA: Obliga al navegador a usar inputs blancos */
+  color-scheme: light; 
+  
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: bold;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 32px;
+  margin: 20px 0;
+}
+
+h2 {
+  font-size: 24px;
+  margin: 0 0 15px;
+}
+
+p {
+  margin: 0;
+}
+
+/* Le damos un pequeño borde y estilo a todos los inputs y textareas para que resalten mejor */
+input, select, textarea {
+  font-family: var(--sans);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid #1a3b5c;
+  border-color: #1a3b5c;
+}

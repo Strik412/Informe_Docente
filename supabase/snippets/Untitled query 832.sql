@@ -1,0 +1,1 @@
+ALTER TABLE informes ADD COLUMN IF NOT EXISTS fecha_elaboracion TEXT;
